@@ -10,7 +10,6 @@ import android.text.TextWatcher
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.common.net.InternetDomainName
 import ru.karasevm.privatednstoggle.R
 import ru.karasevm.privatednstoggle.databinding.DialogAddBinding
 import ru.karasevm.privatednstoggle.model.DnsServer
@@ -134,7 +133,22 @@ class AddServerDialogFragment(
     }
 
     private fun isValidServer(str: String): Boolean {
-        return InternetDomainName.isValid(str)
+        if (str.length > MAX_HOSTNAME_LENGTH) {
+            return false
+        }
+
+        val labels = str.split('.')
+        if (labels.any { it.length > MAX_LABEL_LENGTH || !LABEL_PATTERN.matches(it) }) {
+            return false
+        }
+
+        // A hostname TLD cannot be numeric, which rejects bare IPv4 addresses.
+        return !labels.last().all(Char::isDigit)
     }
 
+    companion object {
+        private const val MAX_HOSTNAME_LENGTH = 253
+        private const val MAX_LABEL_LENGTH = 63
+        private val LABEL_PATTERN = Regex("[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?")
+    }
 }

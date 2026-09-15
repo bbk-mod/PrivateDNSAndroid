@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import ru.karasevm.privatednstoggle.PrivateDNSApp
 import ru.karasevm.privatednstoggle.R
 import ru.karasevm.privatednstoggle.data.DnsServerRepository
+import ru.karasevm.privatednstoggle.util.AutoRevertManager
 import ru.karasevm.privatednstoggle.util.PreferenceHelper
 import ru.karasevm.privatednstoggle.util.PreferenceHelper.requireUnlock
 import ru.karasevm.privatednstoggle.util.PrivateDNSUtils
@@ -59,6 +60,8 @@ class DnsTileService : TileService() {
      *  @param dnsProvider dns provider
      */
     private fun changeDNSServer(mode: String, dnsProvider: String?) {
+        val previousMode = PrivateDNSUtils.getPrivateMode(contentResolver)
+        val previousProvider = PrivateDNSUtils.getPrivateProvider(contentResolver)
         when (mode) {
             DNS_MODE_OFF -> {
                 changeTileState(
@@ -67,7 +70,9 @@ class DnsTileService : TileService() {
                     getString(R.string.dns_off),
                     R.drawable.ic_off_black_24dp,
                     DNS_MODE_OFF,
-                    null
+                    null,
+                    previousMode,
+                    previousProvider
                 )
             }
 
@@ -78,7 +83,9 @@ class DnsTileService : TileService() {
                     getString(R.string.dns_auto),
                     R.drawable.ic_auto_black_24dp,
                     DNS_MODE_AUTO,
-                    dnsProvider
+                    dnsProvider,
+                    previousMode,
+                    previousProvider
                 )
             }
 
@@ -95,7 +102,9 @@ class DnsTileService : TileService() {
                             dnsServer.label.ifEmpty { dnsServer.server },
                             R.drawable.ic_private_black_24dp,
                             DNS_MODE_PRIVATE,
-                            dnsServer.server
+                            dnsServer.server,
+                            previousMode,
+                            previousProvider
                         )
                     }
                 }
@@ -237,6 +246,8 @@ class DnsTileService : TileService() {
      * @param icon tile icon
      * @param dnsMode system dns mode
      * @param dnsProvider system dns provider
+     * @param previousMode dns mode before this change
+     * @param previousProvider dns provider before this change
      */
     private fun changeTileState(
         tile: Tile,
@@ -244,7 +255,9 @@ class DnsTileService : TileService() {
         label: String?,
         icon: Int,
         dnsMode: String,
-        dnsProvider: String?
+        dnsProvider: String?,
+        previousMode: String?,
+        previousProvider: String?
     ) {
         tile.label = label
         tile.state = state
@@ -252,6 +265,13 @@ class DnsTileService : TileService() {
         PrivateDNSUtils.setPrivateMode(contentResolver, dnsMode)
         PrivateDNSUtils.setPrivateProvider(contentResolver, dnsProvider)
         tile.updateTile()
+        AutoRevertManager.onDnsChanged(
+            this,
+            dnsMode,
+            dnsProvider,
+            previousMode,
+            previousProvider
+        )
     }
 
     companion object {

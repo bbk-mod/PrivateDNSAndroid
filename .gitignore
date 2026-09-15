@@ -25,7 +25,15 @@ out/
 
 # Gradle files
 .gradle/
+.gradle-home/
 build/
+
+# Local SDK used for command-line builds
+.android-sdk/
+
+# Release signing material
+.signing/
+keystore.properties
 
 # Local configuration file (sdk path, etc)
 local.properties

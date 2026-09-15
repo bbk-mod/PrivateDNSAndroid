@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import ru.karasevm.privatednstoggle.PrivateDNSApp
 import ru.karasevm.privatednstoggle.data.DnsServerRepository
+import ru.karasevm.privatednstoggle.util.AutoRevertManager
 import ru.karasevm.privatednstoggle.util.PreferenceHelper
 import ru.karasevm.privatednstoggle.util.PrivateDNSUtils
 
@@ -34,10 +35,19 @@ class ShortcutService : Service() {
      */
     private fun setDnsMode(dnsMode: String, dnsProvider: String? = null) {
         Log.d(TAG, "setDnsMode: attempting to set dns mode to $dnsMode with provider $dnsProvider")
+        val previousMode = PrivateDNSUtils.getPrivateMode(contentResolver)
+        val previousProvider = PrivateDNSUtils.getPrivateProvider(contentResolver)
         if (dnsMode == PrivateDNSUtils.DNS_MODE_PRIVATE) {
             PrivateDNSUtils.setPrivateProvider(contentResolver, dnsProvider)
         }
         PrivateDNSUtils.setPrivateMode(contentResolver, dnsMode)
+        AutoRevertManager.onDnsChanged(
+            applicationContext,
+            dnsMode,
+            dnsProvider,
+            previousMode,
+            previousProvider
+        )
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

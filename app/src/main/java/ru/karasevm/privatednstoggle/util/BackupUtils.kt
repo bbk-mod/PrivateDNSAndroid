@@ -6,6 +6,9 @@ import kotlinx.serialization.Serializable
 import ru.karasevm.privatednstoggle.data.DnsServerViewModel
 import ru.karasevm.privatednstoggle.model.DnsServer
 import ru.karasevm.privatednstoggle.util.PreferenceHelper.autoMode
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.autoRevertDelaySeconds
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.autoRevertEnabled
+import ru.karasevm.privatednstoggle.util.PreferenceHelper.autoRevertTarget
 import ru.karasevm.privatednstoggle.util.PreferenceHelper.requireUnlock
 
 object BackupUtils {
@@ -14,6 +17,9 @@ object BackupUtils {
         @SerialName("dns_servers") val dnsServers: List<DnsServer>,
         @SerialName("auto_mode") val autoMode: Int?,
         @SerialName("require_unlock") val requireUnlock: Boolean?,
+        @SerialName("auto_revert_enabled") val autoRevertEnabled: Boolean? = null,
+        @SerialName("auto_revert_delay_seconds") val autoRevertDelaySeconds: Int? = null,
+        @SerialName("auto_revert_target") val autoRevertTarget: Int? = null,
     )
 
     @Serializable
@@ -32,7 +38,10 @@ object BackupUtils {
         return Backup(
             viewModel.allServers.value ?: listOf(),
             sharedPreferences.autoMode,
-            sharedPreferences.requireUnlock
+            sharedPreferences.requireUnlock,
+            sharedPreferences.autoRevertEnabled,
+            sharedPreferences.autoRevertDelaySeconds,
+            sharedPreferences.autoRevertTarget
         )
     }
 
@@ -49,6 +58,9 @@ object BackupUtils {
         backup.dnsServers.forEach { viewModel.insert(it) }
         sharedPreferences.autoMode = backup.autoMode ?: sharedPreferences.autoMode
         sharedPreferences.requireUnlock = backup.requireUnlock ?: sharedPreferences.requireUnlock
+        backup.autoRevertEnabled?.let { sharedPreferences.autoRevertEnabled = it }
+        backup.autoRevertDelaySeconds?.let { sharedPreferences.autoRevertDelaySeconds = it }
+        backup.autoRevertTarget?.let { sharedPreferences.autoRevertTarget = it }
     }
 
     /**

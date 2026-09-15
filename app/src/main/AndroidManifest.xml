@@ -6,6 +6,12 @@
         android:name="android.permission.WRITE_SECURE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <uses-permission
+        android:name="android.permission.SCHEDULE_EXACT_ALARM"
+        tools:ignore="ScheduleExactAlarm" />
+
     <application
         android:name=".PrivateDNSApp"
         android:allowBackup="true"
@@ -15,6 +21,11 @@
         android:theme="@style/Theme.Transparent">
         <service
             android:name=".service.ShortcutService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver
+            android:name=".service.AutoRevertReceiver"
             android:enabled="true"
             android:exported="false" />
 
@@ -54,7 +65,7 @@
             android:exported="true"
             android:theme="@style/Theme.Transparent">
             <intent-filter>
-                <action android:name="ru.karasevm.privatednstoggle.action.SHORTCUT" />
+                <action android:name="ru.karasevm.privatednstoggle.bbk_mod.action.SHORTCUT" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>

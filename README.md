@@ -9,6 +9,37 @@ a single tap.
 
 ![Private DNS app screenshot](readme.jpg)
 
+## About this fork
+
+> **Every change in this fork was written by AI.** Auto-revert and all other divergences from
+> upstream below are AI-authored, not human-written.
+
+Personal fork of [karasevm/PrivateDNSAndroid](https://github.com/karasevm/PrivateDNSAndroid). It
+is not distributed through any app store — no Google Play, F-Droid or IzzyOnDroid listing — and
+none is planned. The badges above and the **IzzyOnDroid** and **GitHub Releases** instructions
+below therefore point at upstream and install the original app, not this fork. The application ID
+here is `ru.karasevm.privatednstoggle.bbk_mod` (`.dev` for debug builds), so it installs alongside
+upstream, and that is the ID the adb command in [Activation](#manual) already uses.
+
+**Auto-revert is the only feature difference**; everything else tracks upstream.
+
+### Auto-revert
+
+Restores Private DNS automatically after a delay, so a temporary switch cannot be forgotten. It is
+off by default — enable it in the app's overflow menu under **Options → Restore Private DNS
+automatically**.
+
+- **Delay** — 10 s, 30 s, 1 min, 5 min (default), 15 min, 30 min, 1 h.
+- **Restore to** — Previous setting (default), Off, Automatic, or First server in the list.
+- While the restore is pending an ongoing notification shows a live countdown with **Keep** and
+  **Restore now** actions, and tapping it opens the app. Setting Private DNS manually to the state
+  the restore was about to apply cancels it as well.
+- The restore runs on an in-process timer, with an alarm as a backstop if the app process is
+  killed. Android 13+ needs notification permission for the countdown and its buttons; Android 12+
+  needs "Alarms &amp; reminders" so the restore is on time while the app is closed. Without
+  notifications the restore still happens but cannot be cancelled, and without exact-alarm access
+  it may be deferred.
+
 ## Installation
 
 ### IzzyOnDroid (Recommended, will enable auto-updates on Android 12+)
@@ -37,7 +68,7 @@ For the app to work properly you'll need to provide it permissions via ADB:
 5. Run this command in the terminal
 
 ```
-./adb shell pm grant ru.karasevm.privatednstoggle android.permission.WRITE_SECURE_SETTINGS
+./adb shell pm grant ru.karasevm.privatednstoggle.bbk_mod android.permission.WRITE_SECURE_SETTINGS
 ```
 
 6. That's it, you should have the app installed.

@@ -5,6 +5,7 @@ import android.os.StrictMode
 import com.google.android.material.color.DynamicColors
 import ru.karasevm.privatednstoggle.data.DnsServerRepository
 import ru.karasevm.privatednstoggle.data.database.DnsServerRoomDatabase
+import ru.karasevm.privatednstoggle.util.AutoRevertManager
 
 class PrivateDNSApp : Application() {
 
@@ -14,6 +15,7 @@ class PrivateDNSApp : Application() {
     override fun onCreate() {
         super.onCreate()
         DynamicColors.applyToActivitiesIfAvailable(this)
+        AutoRevertManager.createNotificationChannel(this)
 
         if (BuildConfig.DEBUG){
             StrictMode.setThreadPolicy(

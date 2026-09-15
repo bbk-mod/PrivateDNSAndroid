@@ -7,7 +7,7 @@
         android:shortcutShortLabel="@string/shortcut_do_cycle">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetPackage="ru.karasevm.privatednstoggle.dev"
+            android:targetPackage="ru.karasevm.privatednstoggle.bbk_mod.dev"
             android:targetClass="ru.karasevm.privatednstoggle.ShortcutHandlerActivity"
             android:data="privatednstoggle://do_cycle"/>
     </shortcut>
@@ -18,7 +18,7 @@
         android:shortcutShortLabel="@string/shortcut_switch_mode">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetPackage="ru.karasevm.privatednstoggle.dev"
+            android:targetPackage="ru.karasevm.privatednstoggle.bbk_mod.dev"
             android:targetClass="ru.karasevm.privatednstoggle.ShortcutHandlerActivity"
             android:data="privatednstoggle://switch_mode"/>
     </shortcut>

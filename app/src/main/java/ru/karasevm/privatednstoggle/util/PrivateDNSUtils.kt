@@ -25,6 +25,12 @@ object PrivateDNSUtils {
     const val AUTO_MODE_OPTION_OFF_AUTO = 2
     const val AUTO_MODE_OPTION_PRIVATE = 3
 
+    // What state to restore to when the auto-revert timer fires
+    const val AUTO_REVERT_TARGET_PREVIOUS = 0
+    const val AUTO_REVERT_TARGET_OFF = 1
+    const val AUTO_REVERT_TARGET_AUTO = 2
+    const val AUTO_REVERT_TARGET_FIRST = 3
+
     private const val PRIVATE_DNS_MODE = "private_dns_mode"
     private const val PRIVATE_DNS_PROVIDER = "private_dns_specifier"
 

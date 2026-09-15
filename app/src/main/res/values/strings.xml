@@ -30,6 +30,36 @@
     <string name="set_to_auto_toast">Private DNS set to auto</string>
     <string name="set_to_provider_toast">Private DNS set to %1$s</string>
     <string name="require_unlock_setting">Require unlocking the device to change server</string>
+    <string name="auto_revert_setting">Restore Private DNS automatically</string>
+    <string name="auto_revert_setting_description">Restores the setting after the delay below. Tap Keep in the notification to cancel.</string>
+    <string name="auto_revert_delay_label">Delay</string>
+    <string name="auto_revert_target_header">Restore to</string>
+    <string name="auto_revert_target_previous">Previous setting</string>
+    <string name="auto_revert_target_off">Off</string>
+    <string name="auto_revert_target_auto">Automatic</string>
+    <string name="auto_revert_target_first">First server in the list</string>
+    <plurals name="auto_revert_delay_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
+    <plurals name="auto_revert_delay_minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+    <plurals name="auto_revert_delay_hours">
+        <item quantity="one">%d hour</item>
+        <item quantity="other">%d hours</item>
+    </plurals>
+    <string name="auto_revert_channel_name">Private DNS auto restore</string>
+    <string name="auto_revert_channel_description">Notifies when the Private DNS setting is about to be restored</string>
+    <string name="auto_revert_notification_title">Private DNS will be restored</string>
+    <string name="auto_revert_notification_text">Restoring to %1$s</string>
+    <string name="auto_revert_keep">Keep</string>
+    <string name="auto_revert_restore_now">Restore now</string>
+    <string name="auto_revert_description_previous">the previous setting</string>
+    <string name="auto_revert_description_first">the first server in the list</string>
+    <string name="auto_revert_notifications_disabled">Notifications are disabled, the restore will still happen but cannot be cancelled</string>
+    <string name="auto_revert_exact_alarm_hint">Allow "Alarms &amp; reminders" so the restore can run while the app is closed</string>
     <string name="a11y_drag_handle">Drag handle</string>
     <string name="menu_import">Import</string>
     <string name="menu_export">Export</string>

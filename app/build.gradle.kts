@@ -1,4 +1,14 @@
 import com.android.build.api.dsl.ApplicationExtension
+import java.util.Properties
+
+// Signing credentials are kept out of version control. When the file is absent the release
+// build falls back to being unsigned, so a fresh clone still builds.
+val keystorePropertiesFile = rootProject.file(".signing/keystore.properties")
+val keystoreProperties = Properties().apply {
+    if (keystorePropertiesFile.exists()) {
+        keystorePropertiesFile.inputStream().use { load(it) }
+    }
+}
 
 plugins {
     id("com.android.application")
@@ -15,7 +25,7 @@ extensions.configure<ApplicationExtension>  {
         generateLocaleConfig = true
     }
     defaultConfig {
-        applicationId = "ru.karasevm.privatednstoggle"
+        applicationId = "ru.karasevm.privatednstoggle.bbk_mod"
         versionCode = 19
         versionName = "1.11.0"
 
@@ -28,6 +38,16 @@ extensions.configure<ApplicationExtension>  {
         buildConfig = true
         compose = true
     }
+    signingConfigs {
+        if (keystorePropertiesFile.exists()) {
+            create("release") {
+                storeFile = rootProject.file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+            }
+        }
+    }
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -37,6 +57,10 @@ extensions.configure<ApplicationExtension>  {
                 "proguard-rules.pro"
             )
             manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
+            // Unsigned when .signing/keystore.properties is absent.
+            if (keystorePropertiesFile.exists()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
         debug {
             applicationIdSuffix = ".dev"
@@ -65,7 +89,6 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.8.9")
     implementation("com.google.android.material:material:1.14.0")
     implementation("androidx.constraintlayout:constraintlayout:2.2.1")
-    implementation("com.google.guava:guava:33.6.0-android")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
 
     val shizukuVersion = "13.1.5"

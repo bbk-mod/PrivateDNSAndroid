@@ -9,6 +9,16 @@ object PreferenceHelper {
     const val DNS_SERVERS = "dns_servers"
     const val AUTO_MODE = "auto_mode"
     const val REQUIRE_UNLOCK = "require_unlock"
+    const val AUTO_REVERT_ENABLED = "auto_revert_enabled"
+    const val AUTO_REVERT_DELAY_SECONDS = "auto_revert_delay_seconds"
+    const val AUTO_REVERT_TARGET = "auto_revert_target"
+    const val AUTO_REVERT_PENDING_MODE = "auto_revert_pending_mode"
+    const val AUTO_REVERT_PENDING_PROVIDER = "auto_revert_pending_provider"
+
+    /**
+     * Default auto-revert delay in seconds (5 minutes)
+     */
+    const val DEFAULT_AUTO_REVERT_DELAY_SECONDS = 300
 
     fun defaultPreference(context: Context): SharedPreferences =
         context.getSharedPreferences("app_prefs", 0)
@@ -53,6 +63,61 @@ object PreferenceHelper {
         set(value) {
             editMe {
                 it.put(REQUIRE_UNLOCK to value)
+            }
+        }
+
+    var SharedPreferences.autoRevertEnabled
+        get() = getBoolean(AUTO_REVERT_ENABLED, false)
+        set(value) {
+            editMe {
+                it.put(AUTO_REVERT_ENABLED to value)
+            }
+        }
+
+    /**
+     * Delay in seconds after which the dns setting is restored
+     */
+    var SharedPreferences.autoRevertDelaySeconds
+        get() = getInt(AUTO_REVERT_DELAY_SECONDS, DEFAULT_AUTO_REVERT_DELAY_SECONDS)
+        set(value) {
+            editMe {
+                it.put(AUTO_REVERT_DELAY_SECONDS to value)
+            }
+        }
+
+    /**
+     * One of [PrivateDNSUtils.AUTO_REVERT_TARGET_PREVIOUS],
+     * [PrivateDNSUtils.AUTO_REVERT_TARGET_OFF], [PrivateDNSUtils.AUTO_REVERT_TARGET_AUTO]
+     * or [PrivateDNSUtils.AUTO_REVERT_TARGET_FIRST]
+     */
+    var SharedPreferences.autoRevertTarget
+        get() = getInt(AUTO_REVERT_TARGET, PrivateDNSUtils.AUTO_REVERT_TARGET_PREVIOUS)
+        set(value) {
+            editMe {
+                it.put(AUTO_REVERT_TARGET to value)
+            }
+        }
+
+    /**
+     * Dns mode a pending restore will apply, or an empty string when no restore is pending.
+     */
+    var SharedPreferences.autoRevertPendingMode
+        get() = getString(AUTO_REVERT_PENDING_MODE, "")!!
+        set(value) {
+            editMe {
+                it.put(AUTO_REVERT_PENDING_MODE to value)
+            }
+        }
+
+    /**
+     * Dns provider a pending restore will apply, or an empty string when there is none. Only
+     * meaningful together with [PrivateDNSUtils.DNS_MODE_PRIVATE].
+     */
+    var SharedPreferences.autoRevertPendingProvider
+        get() = getString(AUTO_REVERT_PENDING_PROVIDER, "")!!
+        set(value) {
+            editMe {
+                it.put(AUTO_REVERT_PENDING_PROVIDER to value)
             }
         }
 }

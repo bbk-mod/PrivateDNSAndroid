@@ -16,6 +16,7 @@ import ru.karasevm.privatednstoggle.data.DnsServerViewModel
 import ru.karasevm.privatednstoggle.data.DnsServerViewModelFactory
 import ru.karasevm.privatednstoggle.databinding.SheetDnsSelectorBinding
 import ru.karasevm.privatednstoggle.model.DnsServer
+import ru.karasevm.privatednstoggle.util.AutoRevertManager
 import ru.karasevm.privatednstoggle.util.PrivateDNSUtils
 import ru.karasevm.privatednstoggle.util.PrivateDNSUtils.checkForPermission
 
@@ -76,6 +77,9 @@ class DNSServerDialogFragment : DialogFragment() {
             dialog!!.dismiss()
         }
         adapter.onItemClick = { id ->
+            val appContext = requireContext().applicationContext
+            val previousMode = PrivateDNSUtils.getPrivateMode(contentResolver)
+            val previousProvider = PrivateDNSUtils.getPrivateProvider(contentResolver)
             when (id) {
                 OFF_ID -> {
                     PrivateDNSUtils.setPrivateMode(
@@ -85,6 +89,13 @@ class DNSServerDialogFragment : DialogFragment() {
                     PrivateDNSUtils.setPrivateProvider(
                         contentResolver,
                         null)
+                    AutoRevertManager.onDnsChanged(
+                        appContext,
+                        PrivateDNSUtils.DNS_MODE_OFF,
+                        null,
+                        previousMode,
+                        previousProvider
+                    )
                     Toast.makeText(context, R.string.set_to_off_toast, Toast.LENGTH_SHORT).show()
                 }
 
@@ -96,6 +107,13 @@ class DNSServerDialogFragment : DialogFragment() {
                     PrivateDNSUtils.setPrivateProvider(
                         contentResolver,
                         null)
+                    AutoRevertManager.onDnsChanged(
+                        appContext,
+                        PrivateDNSUtils.DNS_MODE_AUTO,
+                        null,
+                        previousMode,
+                        previousProvider
+                    )
                     Toast.makeText(context, R.string.set_to_auto_toast, Toast.LENGTH_SHORT).show()
                 }
 
@@ -109,6 +127,13 @@ class DNSServerDialogFragment : DialogFragment() {
                         PrivateDNSUtils.setPrivateProvider(
                             contentResolver,
                             server?.server
+                        )
+                        AutoRevertManager.onDnsChanged(
+                            appContext,
+                            PrivateDNSUtils.DNS_MODE_PRIVATE,
+                            server?.server,
+                            previousMode,
+                            previousProvider
                         )
                         Toast.makeText(
                             context,

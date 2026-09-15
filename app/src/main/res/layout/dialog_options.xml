@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
     <RadioGroup
         android:id="@+id/autoOptionRadioGroup"
@@ -62,4 +66,90 @@
         android:text="@string/require_unlock_setting"
         android:textSize="16sp" />
 
-</LinearLayout>
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="5dp" />
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/autoRevertSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:maxWidth="320dp"
+        android:text="@string/auto_revert_setting"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/autoRevertDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/auto_revert_setting_description"
+        android:textSize="12sp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/autoRevertDelayLayout"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:hint="@string/auto_revert_delay_label">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/autoRevertDelay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <RadioGroup
+        android:id="@+id/autoRevertTargetRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="17dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="17dp">
+
+        <TextView
+            android:id="@+id/autoRevertTargetHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:text="@string/auto_revert_target_header"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/autoRevertTargetPrevious"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auto_revert_target_previous" />
+
+        <RadioButton
+            android:id="@+id/autoRevertTargetOff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auto_revert_target_off" />
+
+        <RadioButton
+            android:id="@+id/autoRevertTargetAuto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auto_revert_target_auto" />
+
+        <RadioButton
+            android:id="@+id/autoRevertTargetFirst"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auto_revert_target_first" />
+
+    </RadioGroup>
+
+    </LinearLayout>
+
+</ScrollView>
