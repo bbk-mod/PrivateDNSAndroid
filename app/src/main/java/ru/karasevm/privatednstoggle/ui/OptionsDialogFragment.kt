@@ -137,10 +137,15 @@ class OptionsDialogFragment : DialogFragment() {
         if (index < 0) {
             index = autoRevertDelays.indexOf(PreferenceHelper.DEFAULT_AUTO_REVERT_DELAY_SECONDS)
                 .coerceAtLeast(0)
+            sharedPreferences.autoRevertDelaySeconds = autoRevertDelays[index]
         }
         binding.autoRevertDelay.setText(labels[index], false)
-        binding.autoRevertDelay.setOnItemClickListener { _, _, position, _ ->
-            sharedPreferences.autoRevertDelaySeconds = autoRevertDelays[position]
+        binding.autoRevertDelay.setOnItemClickListener { parent, _, position, _ ->
+            val selected = parent.getItemAtPosition(position)?.toString()
+            val selectedIndex = labels.indexOf(selected)
+            if (selectedIndex >= 0) {
+                sharedPreferences.autoRevertDelaySeconds = autoRevertDelays[selectedIndex]
+            }
         }
     }
 
